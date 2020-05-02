@@ -9,10 +9,17 @@
   },
   "dependencies": {
     "expo": "~37.0.3",
+    "expo-font": "^8.1.1",
+    "moment": "^2.24.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
-    "react-native-web": "~0.11.7"
+    "react-native-gesture-handler": "^1.6.1",
+    "react-native-web": "~0.11.7",
+    "react-navigation": "^3.11.1",
+    "react-navigation-header-buttons": "^3.0.5",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

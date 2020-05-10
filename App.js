@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import ProductNavigator from './navigation/ProductNavigator';
-import { AppLoading } from 'expo';
-import * as Font from 'expo-font'
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import ProductNavigator from "./navigation/ProductNavigator";
+import { AppLoading } from "expo";
+import * as Font from "expo-font";
+import NavigatorContainer from "./navigation/NavigatorContainer";
 
 const fetchFont = () => {
   return Font.loadAsync({
-    'open-sans-bold' : require('./assets/fonts/OpenSans-Bold.ttf'),
-    'open-sans' : require('./assets/fonts/OpenSans-Regular.ttf')
-  })
-}
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+  });
+};
 
 export default function App() {
-  const [isLoadedFont , setLoadFont] = useState(false); 
-  return !isLoadedFont ?
-  <AppLoading startAsync = {fetchFont} onFinish = {() => setLoadFont(true)} />
-  : 
-  (
-    <Provider store = {store}>
-      <ProductNavigator/>
+  const [isLoadedFont, setLoadFont] = useState(false);
+  return !isLoadedFont ? (
+    <AppLoading startAsync={fetchFont} onFinish={() => setLoadFont(true)} />
+  ) : (
+    <Provider store={store}>
+      <NavigatorContainer />
     </Provider>
   );
 }
@@ -28,8 +28,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

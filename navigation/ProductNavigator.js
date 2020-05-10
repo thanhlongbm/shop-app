@@ -3,6 +3,9 @@ import {
   createStackNavigator,
   createAppContainer,
   createDrawerNavigator,
+  createSwitchNavigator,
+  SafeAreaView,
+  DrawerItems,
 } from "react-navigation";
 import ProductOverview from "../screens/shop/ProductOverViewScreen";
 import { Color } from "../constant/Color";
@@ -14,6 +17,11 @@ import OrderScreen from "../screens/shop/OrderScreen";
 import { Ionicons } from "@expo/vector-icons";
 import UserProductScreen from "../screens/user/UserProductsScreen";
 import EditScreen from "../screens/user/EditProductScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import StartupScreen from "../screens/auth/StartUpCreen";
+import { View, Button } from "react-native";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/action/action";
 
 const defaultNavigationOptions = {
   headerStyle: {
@@ -149,7 +157,7 @@ const AdminNavigator = createStackNavigator(
   }
 );
 
-const AppNavigator = createDrawerNavigator(
+const MainNavigator = createDrawerNavigator(
   {
     Product: ProductNavigator,
     Order: {
@@ -167,7 +175,42 @@ const AppNavigator = createDrawerNavigator(
       },
       activeTintColor: Color.primary,
     },
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+      return (
+        <View>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <DrawerItems {...props} />
+            <Button
+              title="Logout"
+              color={Color.primary}
+              onPress={() => {
+                dispatch(logout());
+              }}
+            />
+          </SafeAreaView>
+        </View>
+      );
+    },
   }
 );
+
+const AuthNavigator = createStackNavigator(
+  {
+    Login: {
+      screen: LoginScreen,
+      navigationOptions: {
+        headerTitle: "Login",
+      },
+    },
+  },
+  { defaultNavigationOptions }
+);
+
+const AppNavigator = createSwitchNavigator({
+  Start: StartupScreen,
+  Auth: AuthNavigator,
+  Main: MainNavigator,
+});
 
 export default createAppContainer(AppNavigator);

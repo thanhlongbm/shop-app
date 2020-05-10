@@ -1,5 +1,13 @@
-import React from "react";
-import { StyleSheet, View, Button, Text, FlatList } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Button,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import { Color } from "../../constant/Color";
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../../components/Shop/CartItem";
@@ -19,19 +27,34 @@ const CartScreen = () => {
       });
     return list.sort((a, b) => (a.key < b.key ? 1 : -1));
   });
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const orderHandler = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await dispatch(orderItems({ items: itemList, totalPrice: totalPrice }));
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  });
 
   const buttonProps =
     totalPrice >= 0.1
       ? {
           color: Color.secondary,
-          onPress: () => {
-            dispatch(orderItems({ items: itemList, totalPrice: totalPrice }));
-          },
+          onPress: orderHandler,
         }
       : {
           color: "#777",
           onPress: () => {},
         };
+
+  if (error) {
+    Alert.alert("ERROR", error, [{ text: "OK" }]);
+  }
 
   return (
     <View style={styles.container}>
@@ -42,7 +65,19 @@ const CartScreen = () => {
             ${totalPrice < 0.01 ? 0 : totalPrice.toFixed(2)}
           </Text>
         </View>
-        <Button title="ODER NOW" {...buttonProps} />
+        {isLoading ? (
+          <View
+            style={{
+              marginRight: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size="large" color={Color.primary} />
+          </View>
+        ) : (
+          <Button title="ODER NOW" {...buttonProps} />
+        )}
       </View>
       <FlatList
         data={itemList}
